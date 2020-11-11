@@ -487,3 +487,19 @@ footer{
 #menu-bas li:hover{
 	background-color:#B09057;
 }
+
+/* Page d'inscription */
+
+.registerForm{
+	background-color: #dacbb3;
+	max-width: 550px;
+	font-size:0.75em;
+}
+
+.registerBtn{
+	background-color:black;
+}
+
+.form-error-message{
+	font-size:115%;
+}
