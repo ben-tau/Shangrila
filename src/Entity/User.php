@@ -94,6 +94,11 @@ class User implements UserInterface
      */
     private $city;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Order::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $orderId;
+
         /**
      * Creation d'une fonction pour permettre d'initialiser le slug (avant la persistance et la maj)
      * @ORM\PrePersist
@@ -233,14 +238,16 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        $roles = $this->userRoles->map(function($role)
-        {
-            return $role->getTitle();
-        })->toArray();
+        // $roles = $this->userRoles->map(function($role)
+        // {
+        //     return $role->getTitle();
+        // })->toArray();
 
-        $roles[] = 'ROLE_USER';
+        // $roles[] = 'ROLE_USER';
 
-        return $roles;
+        // return $roles;
+
+        return ['ROLE_USER'];
     }
 
     public function getUsername()
@@ -251,5 +258,22 @@ class User implements UserInterface
     public function eraseCredentials()
     {
 
+    }
+
+    public function getOrderId(): ?Order
+    {
+        return $this->orderId;
+    }
+
+    public function setOrderId(Order $orderId): self
+    {
+        $this->orderId = $orderId;
+
+        // set the owning side of the relation if necessary
+        if ($orderId->getUser() !== $this) {
+            $orderId->setUser($this);
+        }
+
+        return $this;
     }
 }

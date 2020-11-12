@@ -6,11 +6,15 @@
 			
 			<div class="row d-flex align-items-center p-3">
 				
-				<div class="col-4 text-right text-white">
-					<p class="mb-0"><i class="fa fa-phone px-1"></i> 00-000-0000&nbsp; | <i class="fa fa-phone px-1"></i> 99-999-9999</p>
+				<div class="col-4 text-right text-white" id="adminPart">
+                    <a href="{{path('admin_dashboard')}}">
+                        <p class="mb-0"><i class="fa fa-superpowers px-1">&nbsp;</i>Partie Administration</p>
+                    </a>
 				</div>
-				<div class="col-2 text-center text-white">
-					<p id="mail-header" class="mb-0"><i class="fa fa-envelope-o"></i> email@email.fr</p>
+				<div class="col-2 text-center text-white" id="homepageReturn">
+                    <a href="{{path('homepage')}}">
+					    <p id="mail-header" class="mb-0 pl-5"><i class="fa fa-home">&nbsp;</i>Revenir sur la page d'accueil</p>
+                    </a>
 				</div>
 				<div id="bloc-liens-header" class="col-6 text-center text-white">
 					<p class="text-white mb-0 text-center">
@@ -18,8 +22,7 @@
 						<i class="fa fa-trash"></i>&nbsp;<a href="{{path('account_logout')}}">Se déconnecter</a>
 					{% else %}
 						<i class="fa fa-sign-in"></i>&nbsp;<a href="{{path('account_login')}}">Se connecter</a> | <i class="fa fa-file-text-o"></i>&nbsp;<a href="{{path('account_register')}}">S'inscrire</a>
-					{% endif %}	
-						  | 
+					{% endif %}	 | 
 						<label for="select-language"><i class="fa fa-language"></i></label>
 						<select name="language" id="select-language">
 							<option value="Fr">Fr</option>
@@ -54,20 +57,13 @@
 					<a href="index.html">
 						<div>
 							<div id="trait1" class="ml-3"></div>
-							<p class="px-3">Accueil</p>
+							<p class="px-3">Tableau de bord</p>
 							<div id="trait2"></div>
 						</div>
 					</a>
-					<a href="">A propos</a>
-					<a href="">Réservation</a>
-					<a href="">Menu</a>
-					<a href="">Galerie</a>
-					<a href="">Blog</a>
-					<a href="">Boutique</a>
-					<a href="">Contact</a>
-				
-				<button type="button" data-toggle="modal" data-target="#exampleModal" id="boutonsearch"><i class="fa fa-search text-white"></i></button>
-				<button type="button" data-toggle="modal" data-target="#exampleModal" id="boutonlignes"><i class="fa fa-align-justify text-white"></i></button>
+					<a href="">Réservations</a>
+					<a href="{{path('admin_menus')}}">Nos Menus</a>
+					<a href="">Nos commandes</a>
 				
 			</nav>
 			

@@ -43,6 +43,22 @@ header{
 	color:#B09057;
 }
 
+#adminPart a{
+	color:white;
+}
+
+#adminPart a:hover{
+	color:#000000;
+}
+
+#homepageReturn a{
+	color:white;
+}
+
+#homepageReturn a:hover{
+	color:#B09057;
+}
+
 /* LOGO */
 
 #logo img{
@@ -50,6 +66,10 @@ header{
 }
 
 /* MENU1 */
+
+#menu1{
+	border-bottom: 3px solid #B09057;
+}
 
 nav a{
 	display: inline-block;
@@ -488,15 +508,14 @@ footer{
 	background-color:#B09057;
 }
 
-/* Page d'inscription */
+/* Page d'inscription ou formulaires en général */
 
-.registerForm{
+.isForm{
 	background-color: #dacbb3;
 	max-width: 550px;
-	font-size:0.75em;
 }
 
-.registerBtn{
+.formBtn{
 	background-color:black;
 }
 

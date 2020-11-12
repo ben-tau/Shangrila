@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vos informations personnelles{% endblock %}
+
+{% block body %}
+
+    <div class="container py-5 my-5 isForm">
+    <h1 class="text-center h3">Modifiez vos infos personnelles<br> si vous le souhaitez</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="flash-notice text-center alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary mx-2">Enregistrer vos modifications</button>
+        <a href="{{path('homepage')}}" class="btn btn-secondary mx-2">Retour</a>
+    </div>
+    {{ form_end(form) }}
+
+    </div>
+
+    
+
+{% endblock %}

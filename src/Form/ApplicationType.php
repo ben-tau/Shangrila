@@ -42,4 +42,22 @@ use Symfony\Component\Form\AbstractType;
             ],
                 $options);
         }
+
+        /**
+         * Permet d'avoir la config de base d'un champ de type ChoiceType
+         *
+         * @param string $label
+         * @param string $placeholder
+         * @param array $options
+         * @return array
+         */
+        protected function getConfigurationChoiceTypeInput($label,$choices=[],$options=[])
+        {
+            return array_merge(
+            [
+                'label' => $label,
+                'choices' => $choices
+            ],
+                $options);
+        }
     }

@@ -1,0 +1,26 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Vos menus{% endblock %}
+
+{% block body %}
+    <h1 class="text-center my-5">Vos menus proposés</h1>
+    <div class="container-fluid">
+        <div class="row">
+        {% for menu in menus %}
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <img src="../img/menus/{{menu.img}}" class="card-img-top" alt="{{menu.title}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{menu.title}}</h5>
+                        <p class="card-text">{{menu.text}}</p>
+                        <span class="badge badge-secondary">{{menu.price}}</span>
+                        <span class="badge badge-primary">{% if menu.availability == 1 %}Disponible{% else %}Indisponible{% endif %}</span>
+                        <a href="#" class="btn btn-primary">Commander</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

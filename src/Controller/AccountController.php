@@ -10,6 +10,7 @@ use App\Form\PasswordUpdateType;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -72,13 +73,41 @@ class AccountController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash("success","Votre compte a bien été créé");
+            $this->addFlash("success","Votre compte a bien été créé, veuillez désormais vous connecter");
 
             return $this->RedirectToRoute("account_login");
         }
 
         return $this->render('account/register.html.twig',[
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * Vue et modification du profil utilisateur
+     *
+     * @Route("/account/profile",name="account_profile")
+     * @IsGranted("ROLE_USER")
+     * @return Response
+     */
+    public function profile(Request $request,EntityManagerInterface $entityManager)
+    {
+        $user = $this->getUser();
+
+        $form = $this->createForm(AccountType::class,$user);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash("success","Les informations de votre profil ont bien été modifiées.");
+        }
+
+        return $this->render('account/profile.html.twig',
+        [
+            'form' => $form->createView(),
         ]);
     }
 }
