@@ -47,4 +47,15 @@ class OrderRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findTotalPriceOfOrders($id)
+    {
+        return $this->createQueryBuilder('o')
+                    ->select('SUM(o.total) as totalPrice')
+                    ->where('o.user = :user_id')
+                    ->setParameter('user_id',$id)
+                    ->getQuery()
+                    ->getResult()
+        ;
+    }
 }

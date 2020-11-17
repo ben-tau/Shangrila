@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\OrderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\PreUpdate;
+use Doctrine\ORM\Mapping\PrePersist;
 
 /**
  * @ORM\Entity(repositoryClass=OrderRepository::class)
@@ -19,48 +21,34 @@ class Order
     private $id;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="string", length=255)
      */
-    private $content = [];
+    private $title;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="orderId", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="integer")
      */
-    private $user;
+    private $quantity;
 
     /**
      * @ORM\Column(type="float")
      */
     private $total;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $status;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orders")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getContent(): ?array
-    {
-        return $this->content;
-    }
-
-    public function setContent(array $content): self
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     public function getTotal(): ?float
@@ -71,6 +59,54 @@ class Order
     public function setTotal(float $total): self
     {
         $this->total = $total;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

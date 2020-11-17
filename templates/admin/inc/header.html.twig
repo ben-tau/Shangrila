@@ -19,7 +19,7 @@
 				<div id="bloc-liens-header" class="col-6 text-center text-white">
 					<p class="text-white mb-0 text-center">
 					{% if app.user %}
-						<i class="fa fa-trash"></i>&nbsp;<a href="{{path('account_logout')}}">Se déconnecter</a>
+						<i class="fa fa-shopping-basket"></i></i>&nbsp;<a href="{{path('order')}}">Mon panier repas</a> | <i class="fa fa-trash"></i>&nbsp;<a href="{{path('account_logout')}}">Se déconnecter</a>
 					{% else %}
 						<i class="fa fa-sign-in"></i>&nbsp;<a href="{{path('account_login')}}">Se connecter</a> | <i class="fa fa-file-text-o"></i>&nbsp;<a href="{{path('account_register')}}">S'inscrire</a>
 					{% endif %}	 | 

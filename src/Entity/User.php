@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -98,6 +100,22 @@ class User implements UserInterface
      * @ORM\OneToOne(targetEntity=Order::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $orderId;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Booking::class, mappedBy="userId", orphanRemoval=true)
+     */
+    private $BookingId;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $orders;
+
+    public function __construct()
+    {
+        $this->BookingId = new ArrayCollection();
+        $this->orders = new ArrayCollection();
+    }
 
         /**
      * Creation d'une fonction pour permettre d'initialiser le slug (avant la persistance et la maj)
@@ -216,7 +234,7 @@ class User implements UserInterface
 
     public function getCity(): ?string
     {
-        return $this->city;
+        return strtoupper($this->city);
     }
 
     public function setCity(string $city): self
@@ -272,6 +290,66 @@ class User implements UserInterface
         // set the owning side of the relation if necessary
         if ($orderId->getUser() !== $this) {
             $orderId->setUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Booking[]
+     */
+    public function getBookingId(): Collection
+    {
+        return $this->BookingId;
+    }
+
+    public function addBookingId(Booking $bookingId): self
+    {
+        if (!$this->BookingId->contains($bookingId)) {
+            $this->BookingId[] = $bookingId;
+            $bookingId->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingId(Booking $bookingId): self
+    {
+        if ($this->BookingId->removeElement($bookingId)) {
+            // set the owning side to null (unless already changed)
+            if ($bookingId->getUserId() === $this) {
+                $bookingId->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Order[]
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getUser() === $this) {
+                $order->setUser(null);
+            }
         }
 
         return $this;

@@ -522,3 +522,12 @@ footer{
 .form-error-message{
 	font-size:115%;
 }
+
+.button-payment{
+	background-color:#B09057;
+	font-size:125%;
+}
+
+.orderLine{
+	background-color: rgb(168, 166, 145);
+}

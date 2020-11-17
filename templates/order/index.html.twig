@@ -1,7 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos commandes disponibles{% endblock %}
+{% block title %}Nos menus{% endblock %}
 
 {% block body %}
-
+    <h1 id="title" class="text-center my-5">Mon panier repas</h1>
+    <div class="row m-5">
+        <div class="col-9 p-5">
+            <table class="table">
+                <thead class="button-payment">
+                    <tr>
+                    <th scope="col">Menu</th>
+                    <th scope="col">Quantité</th>
+                    <th scope="col">Prix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for line in order %}
+                    <tr class="orderLine text-white">
+                        <td><strong>{{line.title}}</strong></td>
+                        <td><strong>{{line.quantity}}x</strong></td>
+                        <td id="totalCell"><span id="totalLine" value="{{line.total|number_format(2,',',' ')}}"><strong>{{line.total|number_format(2,',',' ')}}</strong></span> &euro;</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="text-center">
+                    <strong>Montant total : <span class="badge button-payment mt-2 text-white" id="totalOrder">{{total|number_format(2,',',' ')}}</span> &euro;</strong>
+                </div>
+                <button class="btn btn-warning m-3 button-payment text-white"><strong>Payer cette commande</strong></button>
+                <div class="card-body text-center p-3">
+                    <p class="card-text">En passant votre commande, vous acceptez les <br><a href="#">Conditions générales de vente</a> de Shangrila.</p>
+                    <br>
+                    <p class="card-text">Votre panier repas sera livré à cette adresse :<br><br>
+                        <strong>
+                            {{user.address}} {{user.postalCode}} {{user.city}}
+                        </strong>
+                    </p>
+                    <br>
+                    <p>Si ce n'est pas votre adresse, veuillez modifier <br><a href="{{path('account_profile')}}">vos informations personnelles</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
