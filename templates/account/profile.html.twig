@@ -4,24 +4,74 @@
 
 {% block body %}
 
-    <div class="container py-5 my-5 isForm">
-    <h1 class="text-center h3">Modifiez vos infos personnelles<br> si vous le souhaitez</h1>
+<div class="row">
+    <div class="col-5">
+        <div class="container py-5 my-5 isForm">
+        <h1 class="text-center h3">Modifiez vos infos personnelles<br> si vous le souhaitez</h1>
 
-    {% for message in app.flashes('success') %}
-        <div class="flash-notice text-center alert alert-success">
-            {{ message }}
+        {% for message in app.flashes('success') %}
+            <div class="flash-notice text-center alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary mx-2">Enregistrer vos modifications</button>
+            <a href="{{path('homepage')}}" class="btn btn-secondary mx-2">Retour</a>
         </div>
-    {% endfor %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <div class="d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary mx-2">Enregistrer vos modifications</button>
-        <a href="{{path('homepage')}}" class="btn btn-secondary mx-2">Retour</a>
-    </div>
-    {{ form_end(form) }}
+        {{ form_end(form) }}
 
+        </div>
     </div>
-
+    <div class="col-6 p-3 pt-5 m-3">
+        <div class="bookings">
+            <h3>Vos réservations</h3>
+            <table class="table">
+                <thead class="button-payment">
+                    <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Heure</th>
+                    <th scope="col">Nombre de personnes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for booking in bookings %}
+                    <tr class="orderLine text-white">
+                        <td><strong>{{booking.date|format_datetime('short', 'none', locale='fr')}}</strong></td>
+                        <td><strong>{{booking.date|format_datetime('none', 'short', locale='fr')}}h</strong></td>
+                        <td><strong>pour {{booking.personsNumber}} {% if booking.personsNumber == 1 %}personne{% else %}personnes{% endif %}</strong></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="orders pt-5">
+            <h3>Vos commandes</h3>
+            <table class="table">
+                <thead class="button-payment">
+                    <tr>
+                    <th scope="col">Menu</th>
+                    <th scope="col">Quantité</th>
+                    <th scope="col">Statut de la commande</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr class="orderLine text-white">
+                        <td><strong>{{order.title}}</strong></td>
+                        <td><strong>{{order.quantity}}x</strong></td>
+                        <td><strong>{{order.status}}</strong></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="comments">
+        
+        </div>
+    </div>
+</div>
     
 
 {% endblock %}

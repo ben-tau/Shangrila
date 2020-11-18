@@ -7,6 +7,8 @@ use App\Form\AccountType;
 use App\Entity\PasswordUpdate;
 use App\Form\RegistrationType;
 use App\Form\PasswordUpdateType;
+use App\Repository\OrderRepository;
+use App\Repository\BookingRepository;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,9 +92,12 @@ class AccountController extends AbstractController
      * @IsGranted("ROLE_USER")
      * @return Response
      */
-    public function profile(Request $request,EntityManagerInterface $entityManager)
+    public function profile(Request $request,EntityManagerInterface $entityManager,BookingRepository $bookingRepo,OrderRepository $orderRepo)
     {
         $user = $this->getUser();
+
+        $bookings = $bookingRepo->findBy(['user'=>$user]);
+        $orders = $orderRepo->findBy(['user'=>$user]);
 
         $form = $this->createForm(AccountType::class,$user);
         $form->handleRequest($request);
@@ -108,6 +113,8 @@ class AccountController extends AbstractController
         return $this->render('account/profile.html.twig',
         [
             'form' => $form->createView(),
+            'bookings' => $bookings,
+            'orders' => $orders
         ]);
     }
 }

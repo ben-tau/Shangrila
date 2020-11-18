@@ -43,9 +43,9 @@ class Booking
         return $this->user;
     }
 
-    public function setUserId(?User $user): self
+    public function setUser(?User $user): self
     {
-        $this->userId = $user;
+        $this->user = $user;
 
         return $this;
     }
