@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Comment;
 use App\Form\AccountType;
 use App\Entity\PasswordUpdate;
 use App\Form\RegistrationType;
 use App\Form\PasswordUpdateType;
 use App\Repository\OrderRepository;
 use App\Repository\BookingRepository;
+use App\Repository\CommentRepository;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -92,12 +94,13 @@ class AccountController extends AbstractController
      * @IsGranted("ROLE_USER")
      * @return Response
      */
-    public function profile(Request $request,EntityManagerInterface $entityManager,BookingRepository $bookingRepo,OrderRepository $orderRepo)
+    public function profile(Request $request,EntityManagerInterface $entityManager,BookingRepository $bookingRepo,OrderRepository $orderRepo,CommentRepository $CommentRepo)
     {
         $user = $this->getUser();
 
         $bookings = $bookingRepo->findBy(['user'=>$user]);
         $orders = $orderRepo->findBy(['user'=>$user]);
+        $comments = $CommentRepo->findBy(['author'=>$user]);
 
         $form = $this->createForm(AccountType::class,$user);
         $form->handleRequest($request);
@@ -110,11 +113,38 @@ class AccountController extends AbstractController
             $this->addFlash("success","Les informations de votre profil ont bien été modifiées.");
         }
 
+        if(isset($_POST) && isset($_POST['content']) && isset($_POST['rating']) && isset($_POST['booking_id']))
+        {
+            $comment = new Comment();
+
+            $content = $_POST['content'];
+            $rating = intval($_POST['rating']);
+            $bookingId = intval($_POST['booking_id']);
+
+            $booking = $bookingRepo->findOneBy([
+                'id' => $bookingId
+            ]);
+
+            $comment->prePersist();
+
+            $comment->setRating($rating)
+                    ->setContent($content)
+                    ->setAuthor($this->getUser())
+                    ->setBooking($booking)
+            ;
+
+            $entityManager->persist($comment);
+            $entityManager->flush();
+        
+            $this->addFlash("success_comment","Votre avis sur ce repas a bien été pris en compte.");
+        }
+
         return $this->render('account/profile.html.twig',
         [
             'form' => $form->createView(),
             'bookings' => $bookings,
-            'orders' => $orders
+            'orders' => $orders,
+            'comments' => $comments
         ]);
     }
 }

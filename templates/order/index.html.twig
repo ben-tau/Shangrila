@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos menus{% endblock %}
+{% block title %}Mon panier repas{% endblock %}
 
 {% block body %}
     <h1 id="title" class="text-center my-5">Mon panier repas</h1>
@@ -28,9 +28,39 @@
         <div class="col-3">
             <div class="card">
                 <div class="text-center">
-                    <strong>Montant total : <span class="badge button-payment mt-2 text-white" id="totalOrder">{{total|number_format(2,',',' ')}}</span> &euro;</strong>
+                    <strong>Montant total : <span class="badge button-payment my-3 text-white" id="totalOrder">{{total|number_format(2,',',' ')}}</span> &euro;</strong>
                 </div>
-                <button class="btn btn-warning m-3 button-payment text-white"><strong>Payer cette commande</strong></button>
+                <form method="POST">
+                    <div class="form-group text-center my-2">
+                        <label for="date-selected" class="mx-2">Choisissez un jour de livraison :</label>
+                        <input type="date" id="start" name="deliveryDay" value="<?php echo date('Y-m-d');?>" min="<?php echo date('Y-m-d');" max="2022-12-31"><br>
+                        <label for="time-selected" class="mx-2">Heure de livraison :</label>
+                        <select name="deliveryTime" id="">
+                            <option value="12:00:00">12h00</option>
+                            <option value="12:15:00">12h15</option>
+                            <option value="12:30:00">12h30</option>
+                            <option value="12:45:00">12h45</option>
+                            <option value="13:00:00">13h00</option>
+                            <option value="13:15:00">13h15</option>
+                            <option value="13:30:00">13h30</option>
+                            <option value="">-------</option>
+                            <option value="19:30:00">19h30</option>
+                            <option value="19:45:00">19h45</option>
+                            <option value="20:00:00">20h00</option>
+                            <option value="20:15:00">20h15</option>
+                            <option value="20:30:00">20h30</option>
+                            <option value="20:45:00">20h45</option>
+                            <option value="21:00:00">21h00</option>
+                            <option value="21:15:00">21h15</option>
+                            <option value="21:30:00">21h30</option>
+                        </select>
+                        <br>
+                        <a href="{{path('order_payment')}}">
+                            <button class="btn btn-warning m-3 button-payment text-white" type="submit" id="checkout-button"><strong>Payer cette commande</strong></button>
+                        </a>
+                    </div>
+                </form>
+                
                 <div class="card-body text-center p-3">
                     <p class="card-text">En passant votre commande, vous acceptez les <br><a href="#">Conditions générales de vente</a> de Shangrila.</p>
                     <br>

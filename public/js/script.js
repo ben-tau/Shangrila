@@ -1,26 +1,46 @@
-/* ca ne marche pas et je ne sais pas pourquoi */
+window.onload = () => {
+    // variables 
+    let stripe = Stripe('pk_test_51HMweMJjakv6WiwjSET8nYV0tCraErD3MJ3btGLcymprm3dUVJZ8PAliOI7m4Qeqt7PzTlhWr7u5dwg61JBZzk9R006jkVvYVT')
+    let elements = stripe.elements()
 
-/* $(document).ready(function(){
+    // objets de la page
+    let cardHolderName = document.getElementById("name")
+    let holderEmail = document.getElementById("email")
+    let cardButton = document.getElementById("payment-button")
+    let clientSecret = cardButton.dataset.secret;
 
-// on initialise la valeur de notre futur total 
+    // crée les élements de form de la cb
+    let card = elements.create("card")
+    card.mount("#card-elements")
 
-    var total = 0;
-
-// on récupère la valeur de tous les totaux des lignes de commandes de notre tableau affiché
-// on le rajoute au total
-
-    $('#totalCell').each(function(){
-
-        var x = $(this).children().html().replace(",",".");
-
-        if(!isNaN(x) && x!=0)
+    // on gère la saisie
+    card.addEventListener("change", (event) => {
+        let displayError = document.getElementById("card-errors")
+        if(event.error)
         {
-            total = total + parseFloat(x);
-            console.log(total);
-        }   
-    });
+            displayError.textContent = event.error.message;
+        }
+        else
+        {
+            displayError.textContent = "";
+        }
+    })
 
-// on l'insère dans le span #totalOrder
-
-    $('#totalOrder').text(total.toFixed(2).replace(".",","));
-}); */
+    // on gère le paiement et on envoie les infos a stripe
+    cardButton.addEventListener("click",() =>{
+        stripe.handleCardPayment(
+            clientSecret, card, {
+                payment_method_data: {
+                    billing_details: {
+                        name: cardHolderName.value,
+                        email: holderEmail.value
+                    }
+                }
+            }
+        ).then((result) => {
+            if(result.error){
+                document.getElementById("errors").innerText = result.error.message
+            }
+        })
+    })
+}

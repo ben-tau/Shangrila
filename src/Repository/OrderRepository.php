@@ -58,4 +58,15 @@ class OrderRepository extends ServiceEntityRepository
                     ->getResult()
         ;
     }
+
+    public function findAllTitlesOfOrders($id)
+    {
+        return $this->createQueryBuilder('o')
+                    ->select('o.title as titleOrder, o.quantity as orderQuantity')
+                    ->where('o.user = :user_id')
+                    ->setParameter('user_id',$id)
+                    ->getQuery()
+                    ->getResult()
+        ;
+    }
 }

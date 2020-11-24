@@ -33,12 +33,55 @@
                             <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton{{menu.id}}">
                                 <form method="POST" name="order-{{menu.title}}">    
                                     <label class="required" for="quantity">Quantité</label>
-                                    <select id="order_quantity" name="quantity" class="form-control mb-2"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
+                                    <select id="order_quantity" name="quantity" class="form-control mb-2">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
                                     <input type="hidden" name="title" value="{{menu.title}}">
                                     <input type="hidden" name="price" value="{{menu.price}}">
                                     <button type="submit" class="btn btn-dark text-white">Ajouter</button>
                                 </form>
                             </div>
+                        </div>
+                    </div>
+                    <div class="dropdown d-flex justify-content-center">
+                        <button class="btn btn-secondary py-1" style="max-width:75%;font-size:75%;" type="button" id="dropdownCommentButton{{menu.id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Faire&nbsp;un&nbsp;commentaire</button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownCommentButton{{menu.id}}">
+                            <form method="POST" class="p-3">
+                                <textarea name="content" id="content" cols="30" rows="5" placeholder="Votre commentaire..." class="mb-2"></textarea>
+                                <label for="rating">Notez le menu de 1 à 5 <i class="fa fa-star" style="color:gold;"></i> :</label>
+                                <select id="rating" name="rating" class="form-control mb-2">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <input type="hidden" value="{{menu.id}}" name="menu_id">
+                                <button type="submit" class="btn btn-dark text-white">Valider</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="dropdown d-flex justify-content-center">
+                        <button class="btn btn-warning py-1" style="max-width:75%;font-size:75%;" type="button" id="dropdownNoticeButton{{menu.id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Voir&nbsp;les&nbsp;avis</button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownNoticeButton{{menu.id}}">
+                        {% set y = 0 %}
+                        {% for comment in comments %}
+                            {% if menu == comment.menu %}
+                            {% set y = 1 %}
+                                <div class="comment-group mb-2 text-center" style="background-color:lightblue;">
+                                    <h6 style="font-size:70%;">Posté par <span style="color:#494646;">{{comment.author.fullName}}</span></h6>
+                                    <p class="mb-0" style="font-size:80%;"><em>"{{comment.content}}"</em></p>
+                                    {% set x = comment.rating %}
+                                    <span class="badge badge-dark text-white">{{x}} {% for i in 1..x %}<i class="fa fa-star" style="color:gold;"></i>{% endfor %}</span>
+                                </div>                    
+                            {% endif %}
+                        {% endfor %} 
+                            {% if y == 0 %}
+                                <p class="text-center p-2 mb-0" style="color:indianred;font-size:75%;">Aucun avis n'est encore donné sur ce menu.<br>
+                                 N'hésitez pas à en commander un<br> pour nous donner le vôtre !</p> 
+                            {% endif %}
                         </div>
                     </div>
                 </div>
