@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Menu;
 use App\Form\AdminMenuType;
+use App\Form\AdminMenuEditType;
 use App\Repository\MenuRepository;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -19,12 +22,14 @@ class AdminMenuController extends AbstractController
     /**
      * @Route("/admin/menus", name="admin_menus")
      */
-    public function index(MenuRepository $repo): Response
+    public function index(MenuRepository $menuRepo,CommentRepository $commentRepo): Response
     {
-        $menus = $repo->findAll();
+        $menus = $menuRepo->findAll();
+        $comments = $commentRepo->findAll();
 
         return $this->render('admin/menus/index.html.twig', [
-            'menus' => $menus
+            'menus' => $menus,
+            'comments' => $comments
         ]);
     }
 
@@ -78,5 +83,50 @@ class AdminMenuController extends AbstractController
             'menu'=>$menu,
             'form'=>$form->createView()
         ]);
+    }
+
+    /**
+     * Permet d'éditer un commentaire via l'admin
+     * @Route("/admin/menus/{id}/edit",name="admin_menus_edit")
+     * @param Menu $menu
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    public function edit(Menu $menu,Request $request,EntityManagerInterface $entityManager)
+    {
+        $form = $this->createForm(AdminMenuEditType::class,$menu);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager->persist($menu);
+            $entityManager->flush();
+
+            $this->addFlash("success","La modification du menu a bien été effectuée");
+        } 
+
+        return $this->render('admin/menus/edit.html.twig',[
+            'menu' => $menu,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * Suppression d'un menu par l'admin
+     * @Route("/admin/menus/{id}/delete",name="admin_menu_delete")
+     * @param Menu $menu
+     * @param EntityManagerInterface $entityManager
+     * @return void
+     */
+    public function delete(Menu $menu,EntityManagerInterface $entityManager)
+    {
+        $id = $menu->getId();
+
+        $entityManager->remove($menu);
+        $entityManager->flush();
+
+        $this->addFlash("success","Le menu $id a bien été supprimé !");
+        return $this->redirectToRoute('admin_menus');
     }
 }

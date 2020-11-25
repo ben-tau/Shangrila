@@ -4,6 +4,19 @@
 
 {% block body %}
     <h1 class="text-center my-5">Vos menus proposés</h1>
+    {% for message in app.flashes('success') %}
+        <div class="flash-notice text-center alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('warning') %}
+        <div class="flash-notice text-center alert alert-warning">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <div class="d-flex justify-content-center">
+        <a href="{{path('admin_menus_create')}}" class="btn btn-primary">Créer un nouveau menu</a>
+    </div>
     <div class="container-fluid my-5">
         <div class="row">
         {% for menu in menus %}
@@ -15,7 +28,33 @@
                         <p class="card-text">{{menu.text}}</p>
                         <span class="badge badge-secondary">{{menu.price}} &euro;</span>
                         <span class="badge badge-primary {% if menu.availability == 1 %}bg-success{% else %}bg-danger{% endif %}">{% if menu.availability == 1 %}Disponible{% else %}Indisponible{% endif %}</span>
-                        <a href="#" class="btn {% if menu.availability == 1 %}btn-primary{% else %}btn-secondary{% endif %} {% if menu.availability != 1 %}disabled{% endif %}" >{% if menu.availability != 1 %}<strike>{% endif %}Commander{% if menu.availability != 1 %}</strike>{% endif %}</a>
+                        <br>
+                        <br>
+                        <div class="dropdown d-flex justify-content-center">
+                            <button class="btn btn-dark text-white py-1" style="max-width:75%;font-size:75%;" type="button" id="dropdownNoticeButton{{menu.id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Voir&nbsp;les&nbsp;avis</button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownNoticeButton{{menu.id}}">
+                            {% set y = 0 %}
+                            {% for comment in comments %}
+                                {% if menu == comment.menu %}
+                                {% set y = 1 %}
+                                    <div class="comment-group mb-2 text-center" style="background-color:lightblue;">
+                                        <h6 style="font-size:70%;">Posté par <span style="color:#494646;">{{comment.author.fullName}}</span></h6>
+                                        <p class="mb-0" style="font-size:80%;"><em>"{{comment.content}}"</em></p>
+                                        {% set x = comment.rating %}
+                                        <span class="badge badge-dark text-white">{{x}}/5 {% for i in 1..x %}<i class="fa fa-star" style="color:gold;"></i>{% endfor %}</span>
+                                    </div>                    
+                                {% endif %}
+                            {% endfor %} 
+                                {% if y == 0 %}
+                                    <p class="text-center p-2 mb-0" style="color:indianred;font-size:75%;">Aucun avis n'est encore donné sur ce menu.</p><br> 
+                                {% endif %}
+                            </div>
+                        </div>
+                        <br>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{path('admin_menus_edit',{'id':menu.id})}}" class="btn btn-warning" style="font-size:75%;">Modifier</a>
+                            <a href="{{path('admin_menu_delete',{'id':menu.id})}}" class="btn btn-danger" style="font-size:75%;">Supprimer</a>
+                        </div>
                     </div>
                 </div>
             </div>

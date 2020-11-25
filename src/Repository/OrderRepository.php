@@ -53,6 +53,7 @@ class OrderRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('o')
                     ->select('SUM(o.total) as totalPrice')
                     ->where('o.user = :user_id')
+                    ->andWhere("o.status = 'commandé'")
                     ->setParameter('user_id',$id)
                     ->getQuery()
                     ->getResult()
@@ -68,5 +69,20 @@ class OrderRepository extends ServiceEntityRepository
                     ->getQuery()
                     ->getResult()
         ;
+    }
+
+    public function LinkTheOrderLineAndThePayment($id,$paymentId,$status)
+    {
+        $q = $this->createQueryBuilder('o')
+                  ->update()
+                  ->set('o.payment',$paymentId)
+                  ->where('o.user = :user_id')
+                  ->andWhere("o.status = $status")
+                  ->setParameter('user_id',$id)
+        ;
+
+        $query = $q->getQuery();
+        return $query->execute();
+
     }
 }

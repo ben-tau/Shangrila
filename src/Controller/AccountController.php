@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Booking;
 use App\Entity\Comment;
 use App\Form\AccountType;
 use App\Entity\PasswordUpdate;
@@ -146,5 +147,51 @@ class AccountController extends AbstractController
             'orders' => $orders,
             'comments' => $comments
         ]);
+    }
+
+    /**
+     * Suppression d'une réservation par le client
+     * @Route("/booking/{id}/delete",name="booking_delete")
+     * @param Booking $booking
+     * @param EntityManagerInterface $entityManager
+     * @return void
+     */
+    public function deleteBooking(Booking $booking,EntityManagerInterface $entityManager)
+    {
+        $id = $booking->getId();
+
+        $entityManager->remove($booking);
+        $entityManager->flush();
+
+        $this->addFlash("success","La réservation n°$id a bien été supprimée !");
+        return $this->redirectToRoute('account_profile');
+    }
+
+    /**
+     * Suppression d'une ligne de commande par le client
+     * @Route("/order/{id}/delete",name="order_delete")
+     * @param Order $order
+     * @param EntityManagerInterface $entityManager
+     * @return void
+     */
+    public function deleteOrder(Order $order,EntityManagerInterface $entityManager)
+    {
+        $id = $order->getId();
+        $status = $order->getStatus();
+
+        if($status == "commandé")
+        {
+            $entityManager->remove($order);
+            $entityManager->flush();
+            
+            $this->addFlash("success","La ligne de commande $id a bien été supprimée !");
+        }
+        else
+        {
+            $this->addFlash("warning","La ligne de commande $id ne peut pas être supprimée car elle a déjà été payée et est en attente de livraison !");
+        }
+
+        
+        return $this->redirectToRoute('admin_orders');
     }
 }

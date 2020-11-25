@@ -1,0 +1,65 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Modifier une réservation{% endblock %}
+
+{% block body %}
+			<div class="container-fluid text-center">
+                <h1 class="text-center my-5">Modification de la réservation n°{{booking.id}}</h1>
+                {% for message in app.flashes('success') %}
+                    <div class="flash-notice text-center alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                {% for message in app.flashes('warning') %}
+                    <div class="flash-notice text-center alert alert-warning">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                <div class="text-center mb-5" style="background-color:lightblue;">
+                    Réservation actuelle créée par <strong>{{booking.user.fullName}}</strong> pour le <strong>{{booking.date|format_datetime('full', 'none', locale='fr')}}</strong> à <strong>{{booking.date|format_datetime('none', 'short', locale='fr')}}h</strong> et pour une
+                    table de <strong>{{booking.personsNumber}} {% if booking.personsNumber == 1 %}personne{% else %}personnes{% endif %}</strong>.
+                </div>
+				<form method="POST">
+					<h6>Effectuez vos modifications ici</h4>
+					<label for="date-selected" class="mx-2"><i class="fa fa-calendar"></i></label>
+					<input type="date" id="start" name="bookingDate" value="<?php echo date('Y-m-d');?>" min="<?php echo date('Y-m-d');" max="2022-12-31">
+       				<label for="time-selected" class="mx-2"><i class="fa fa-clock-o"></i></label>
+       				<select name="bookingTime" id="">
+       					<option value="12:00:00">12h00</option>
+       					<option value="12:15:00">12h15</option>
+       					<option value="12:30:00">12h30</option>
+       					<option value="12:45:00">12h45</option>
+       					<option value="13:00:00">13h00</option>
+       					<option value="13:15:00">13h15</option>
+       					<option value="13:30:00">13h30</option>
+       					<option value="">-------</option>
+       					<option value="19:30:00">19h30</option>
+       					<option value="19:45:00">19h45</option>
+       					<option value="20:00:00">20h00</option>
+       					<option value="20:15:00">20h15</option>
+       					<option value="20:30:00">20h30</option>
+						<option value="20:45:00">20h45</option>
+      					<option value="21:00:00">21h00</option>
+      					<option value="21:15:00">21h15</option>
+      					<option value="21:30:00">21h30</option>
+       				</select>
+       				<label for="people-number" class="mx-2"><i class="fa fa-users"></i></label>
+       				<select name="personsNumber" id="">
+       					<option value="1">1</option>
+       					<option value="2">2</option>
+       					<option value="3">3</option>
+       					<option value="4">4</option>
+       					<option value="5">5</option>
+       					<option value="6">6</option>
+       					<option value="7">7</option>
+       					<option value="8">8</option>
+       					<option value="9">9</option>
+                        <option value="10">10</option>
+       				</select>
+       				<br>
+       				<input type="submit" class="my-5" value="Enregistrer les modifications" id="bouton-reserver" href="#reservation">
+       				
+				</form>
+				
+			</div>
+{% endblock %}

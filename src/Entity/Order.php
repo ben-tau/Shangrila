@@ -46,6 +46,11 @@ class Order
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Payment::class, inversedBy="orders")
+     */
+    private $payment;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,6 +112,18 @@ class Order
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(?Payment $payment): self
+    {
+        $this->payment = $payment;
 
         return $this;
     }

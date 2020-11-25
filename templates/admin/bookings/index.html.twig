@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les réservations clients{% endblock %}
+
+{% block body %}
+        <h1 class="text-center mt-5">Liste des réservations clients</h1>
+        {% for message in app.flashes('success') %}
+            <div class="flash-notice text-center alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('warning') %}
+            <div class="flash-notice text-center alert alert-warning">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <div class="container-fluid m-3 p-3" style="max-width:82%;">
+            <table class="table m-5">
+                <thead class="button-payment">
+                    <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Heure</th>
+                    <th scope="col">Nombre de personnes</th>
+                    <th class="pr-0"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for booking in bookings %}
+                    <tr class="orderLine text-white">
+                        <td><strong>{{booking.date|format_datetime('short', 'none', locale='fr')}}</strong></td>
+                        <td><strong>{{booking.date|format_datetime('none', 'short', locale='fr')}}h</strong></td>
+                        <td><strong>pour {{booking.personsNumber}} {% if booking.personsNumber == 1 %}personne{% else %}personnes{% endif %}</strong></td>
+                        <td class="pr-0"><a href="{{path('admin_booking_edit',{'id':booking.id})}}" class="btn btn-warning">Modifier</a> - <a href="{{path('admin_booking_delete',{'id':booking.id})}}" class="btn btn-danger">Supprimer</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+{% endblock %}

@@ -9,17 +9,18 @@
         {{ message }}
     </div>
 {% endfor %}
+{% for message in app.flashes('success') %}
+    <div class="flash-notice text-center alert alert-success">
+        {{ message }}
+    </div>
+{% endfor %}
 
 <div class="row">
     <div class="col-5">
         <div class="container py-5 my-5 isForm">
         <h1 class="text-center h3">Modifiez vos infos personnelles<br> si vous le souhaitez</h1>
 
-        {% for message in app.flashes('success') %}
-            <div class="flash-notice text-center alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
+
         {{ form_start(form) }}
         {{ form_widget(form) }}
         <div class="d-flex justify-content-center">
@@ -40,6 +41,7 @@
                     <th scope="col">Heure</th>
                     <th scope="col">Nombre de personnes</th>
                     <th scope="col">Commentaire</th>
+                    <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,6 +83,7 @@
                                 </div>
                             </div>
                         </td>
+                        <td class="pr-0"><a href="{{path('booking_delete',{'id':booking.id})}}" class="btn btn-danger">Supprimer</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -94,6 +97,7 @@
                     <th scope="col">Menu</th>
                     <th scope="col">Quantité</th>
                     <th scope="col">Statut de la ligne de commande</th>
+                    <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,6 +106,11 @@
                         <td><strong>{{order.title}}</strong></td>
                         <td><strong>{{order.quantity}}x</strong></td>
                         <td><strong>{{order.status}}</strong></td>
+                        {% if order.status == "commandé" %}
+                        <td class="pr-0"><a href="{{path('order_delete',{'id':order.id})}}" class="btn btn-danger">Supprimer</a></td>
+                        {% else %}
+                        <td class="pr-0"><a href="{{path('order_delete',{'id':order.id})}}" class="btn" style="background-color:grey;cursor:not-allowed;opacity:0.5;">Supprimer</a></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>

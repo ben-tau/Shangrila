@@ -22,7 +22,8 @@ class OrderController extends AbstractController
         $userId = $this->getUser()->getId();
 
         $order = $orderRepo->findBy([
-            'user' => $userId
+            'user' => $userId,
+            'status' => 'commandé'
         ]);  
         
         $total = $orderRepo->findTotalPriceOfOrders($userId);
@@ -63,6 +64,11 @@ class OrderController extends AbstractController
 
             $entityManager->persist($payment);
             $entityManager->flush();
+
+            $paymentId = $payment->getId();
+            $status = "'commandé'";
+
+            $orderRepo->LinkTheOrderLineAndThePayment($userId,$paymentId,$status);
 
             return $this->redirectToRoute("order_payment",
             [

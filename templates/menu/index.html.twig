@@ -74,7 +74,7 @@
                                     <h6 style="font-size:70%;">Posté par <span style="color:#494646;">{{comment.author.fullName}}</span></h6>
                                     <p class="mb-0" style="font-size:80%;"><em>"{{comment.content}}"</em></p>
                                     {% set x = comment.rating %}
-                                    <span class="badge badge-dark text-white">{{x}} {% for i in 1..x %}<i class="fa fa-star" style="color:gold;"></i>{% endfor %}</span>
+                                    <span class="badge badge-dark text-white">{{x}}/5 {% for i in 1..x %}<i class="fa fa-star" style="color:gold;"></i>{% endfor %}</span>
                                 </div>                    
                             {% endif %}
                         {% endfor %} 

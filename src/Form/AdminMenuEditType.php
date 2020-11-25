@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class AdminMenuType extends ApplicationType
+class AdminMenuEditType extends ApplicationType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -28,7 +28,6 @@ class AdminMenuType extends ApplicationType
         // ])];
 
         $builder
-            ->add('img',FileType::class,$this->getConfiguration("Image du menu","Sélectionnez une image..."),['mapped'=>false,'required'=>false])
             ->add('title',TextType::class,$this->getConfiguration("Titre du menu","Donnez un titre à votre menu"))
             ->add('text',TextareaType::class,$this->getConfiguration("Descriptif du menu","Renseignez ici votre menu"))
             ->add('price',MoneyType::class,$this->getConfiguration("Prix du menu","Prix"))

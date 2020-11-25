@@ -15,6 +15,9 @@
 				<div id="bloc-liens-header" class="col-6 text-center text-white">
 					<p class="text-white mb-0 text-center">
 					{% if app.user %}
+						{% if is_granted('ROLE_ADMIN') %}
+						<i class="fa fa-cog"></i></i>&nbsp;<a href="{{path('admin')}}">Administration</a> |
+						{% endif %}
 						<i class="fa fa-user"></i></i>&nbsp;<a href="{{path('account_profile')}}">Mon profil</a> |
 						<i class="fa fa-shopping-basket"></i></i>&nbsp;<a href="{{path('order')}}">Mon panier repas</a> |
 						<i class="fa fa-trash"></i>&nbsp;<a href="{{path('account_logout')}}">Se déconnecter</a>
@@ -53,7 +56,7 @@
 			<nav class="py-3 text-center d-flex justify-content-center align-items-center">
 			
 				
-					<a href="index.html">
+					<a href="{{path('homepage')}}">
 						<div>
 							<div id="trait1" class="ml-3"></div>
 							<p class="px-3">Accueil</p>
@@ -61,8 +64,8 @@
 						</div>
 					</a>
 					<a href="">A propos</a>
-					<a href="">Réservation</a>
-					<a href="">Menu</a>
+					<a href="#reservation">Réservation</a>
+					<a href="{{path('menus')}}">Menu</a>
 					<a href="">Galerie</a>
 					<a href="">Blog</a>
 					<a href="">Boutique</a>

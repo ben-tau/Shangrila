@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les commandes clients{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-5">Les lignes de commande effectuées par les clients</h1>
+        {% for message in app.flashes('success') %}
+            <div class="flash-notice text-center alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('warning') %}
+            <div class="flash-notice text-center alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <div class="container-fluid m-3 p-3" style="max-width:82%;">
+            <table class="table m-5">
+                <thead class="button-payment">
+                    <tr>
+                    <th scope="col">Menu choisi</th>
+                    <th scope="col">Quantité</th>
+                    <th scope="col">Total TTC</th>
+                    <th scope="col">Statut de la ligne de commande</th>
+                    <th scope="col">Créée par</th>
+                    <th scope="col">Date de Livraison</th>
+                    <th scope="col">Réf. paiement</th>
+                    <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr class="orderLine text-white">
+                        <td><strong>{{order.title}}</strong></td>
+                        <td><strong>{{order.quantity}}</strong></td>
+                        <td><strong>{{order.total}}&euro;</strong></td>
+                        <td><strong>{{order.status}}</strong></td>
+                        <td><strong>{{order.user.fullName}}</strong></td>
+                        {% if order.payment.deliveryDate is defined %}
+                        <td><strong>{{order.payment.deliveryDate|format_datetime('short', 'none', locale='fr')}} à {{order.payment.deliveryDate|format_datetime('none', 'short', locale='fr')}}h</strong></td>
+                        {% else %}
+                        <td>en attente de paiement</td>
+                        {% endif %}
+                        {% if order.payment.deliveryDate is defined %}
+                        <td><strong>{{order.payment.token}}</strong></td>
+                        {% else %}
+                        <td>ND</td>
+                        {% endif %}
+                        <td class="pr-0"><a href="{{path('admin_order_delete',{'id':order.id})}}" class="btn btn-danger">Supprimer</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+{% endblock %}
